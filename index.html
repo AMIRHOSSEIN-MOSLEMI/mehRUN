@@ -762,11 +762,14 @@
         }
 
         function resetGameData() {
+            gameActive = false; // فیکس باگ اجرا در پس‌زمینه
             lives = 3; score = 0; baseSpeed = 5.5; speed = baseSpeed; isNight = false; isBoulevard = false; isTransitioning = false; isSlowMo = false;
             hasShield = false; isInvulnerable = false; laneBlockEnd = [0, 0, 0]; heroUsed = false; isPaused = false; isArrivingHome = false;
+            
             if(hugInterval) clearInterval(hugInterval);
             document.querySelectorAll('.hug-emoji').forEach(el => el.remove());
             document.getElementById('hero-btn').style.display = 'flex';
+            
             board.className = ''; board.style.animationDuration = '0.5s';
             muggerCar.style.display = 'none'; muggerCar.style.bottom = '-150px';
             player.classList.remove('player-boulevard', 'player-shielded', 'invulnerable'); playerShadow.classList.remove('shadow-boulevard');
@@ -775,8 +778,19 @@
             flashOverlay.classList.remove('flash-gold-anim'); slowmoPopup.style.display = 'none';
             pauseBtn.style.display = 'none'; document.getElementById('ui').style.opacity = '1';
             document.getElementById('home-finish').style.display = 'none'; document.getElementById('home-finish').classList.remove('home-enter');
+            
             updateLivesDisplay('set'); scoreEl.innerText = score; currentLane = 1; updatePlayerPosition();
             items.forEach(item => item.el.remove()); items = [];
+            
+            // رفع باگ فریز شدن انیمیشن‌ها بعد از زدن دکمه مرخصی
+            board.style.animationPlayState = '';
+            document.querySelectorAll('.buildings').forEach(b => b.style.animationPlayState = '');
+            player.style.animationPlayState = '';
+            playerShadow.style.animationPlayState = '';
+            
+            // قطع کامل آهنگ و برگرداندن به ثانیه صفر برای بازی بعدی
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
         }
 
         // --- رفع مشکل دکمه استراحت روی گوشی ---
