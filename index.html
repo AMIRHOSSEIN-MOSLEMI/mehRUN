@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mehRUN</title>
     
+    <!-- ========================================== -->
+    <!-- کدهای تبدیل بازی به اپلیکیشن قابل نصب (PWA) -->
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="mehRUN">
+    <link rel="apple-touch-icon" href="face.png">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"mehRUN: The Official Game","short_name":"mehRUN","start_url":".","display":"standalone","background_color":"#1a1a2e","theme_color":"#1a1a2e","icons":[{"src":"face.png","sizes":"192x192","type":"image/png"},{"src":"face.png","sizes":"512x512","type":"image/png"}]}'>
+
+    <!-- تگ‌های پیش‌نمایش کارت تلگرام و واتساپ -->
+    <meta property="og:title" content="mehRUN: The Official Game 🎮">
+    <meta property="og:description" content="شبیه ساز یک روز کاری مهران">
+    <meta property="og:image" content="poster.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- ========================================== -->
+
     <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
     
     <style>
@@ -1192,6 +1209,19 @@
         }
 
         updatePlayerPosition();
+
+        // ==========================================
+        // ثبت Service Worker فیک برای نصب شدن قطعی بازی روی گوشی
+        if ('serviceWorker' in navigator) {
+            const swCode = "self.addEventListener('fetch', function(event) {});";
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(swUrl).catch(function(error) {
+                console.log('SW registration failed:', error);
+            });
+        }
+        // ==========================================
+
     </script>
 </body>
 </html>
